@@ -3,8 +3,8 @@
 #include <stdlib.h>
 SoftwareSerial BTSerial(2, 3);
 #define MOTOR_NUM 2
-#define SENSING_COUNT 5
-#define THRESHOLD 75
+#define SENSING_COUNT 4
+//#define THRESHOLD 75
 
 const int E1Pin = 10;
 const int E2Pin = 11;
@@ -13,14 +13,14 @@ const int M2Pin = 13;
 const int LEDPin = 6;
 const int collidePin = 8;
 const int btnPin = 5;
-const int speedo = 150;
+const int speedo = 100;
 int cds = A1;
 int switch_val = 0;
 int flag = 0;
 int isReceived = 0;
 int loopgo = 0;
 int isBright = 1;
-//int THRESHOLD = 20;
+int THRESHOLD = 20;
 typedef struct {
   byte enPin;
   byte directionPin;
@@ -50,10 +50,10 @@ void setup(){
 
   pinMode(collidePin, INPUT);
 
-  for(i = 0;i < MOTOR_NUM;i++){
-    pinMode(Motors[i].enPin, OUTPUT);
-    pinMode(Motors[i].directionPin, OUTPUT);
-  }
+//  for(i = 0;i < MOTOR_NUM;i++){
+//    pinMode(Motors[i].enPin, OUTPUT);
+//    pinMode(Motors[i].directionPin, OUTPUT);
+//  }
 //  go(120);
 }
 ////////////////////////////////////////////////////////////////
@@ -62,10 +62,10 @@ void loop(){
 //    THRESHOLD += 25;
     delay(5000);
     digitalWrite(LEDPin,HIGH);
-    go(speedo);
+//    go(speedo);
     check_danger();
-    halt();
-    send_signal();
+//    halt();
+//    send_signal();
     flag = 0;
 }
 ////////////////////////////////////////////////////////////////
@@ -191,7 +191,7 @@ void check_danger()
     if(blink_count == SENSING_COUNT)
     {
 //      lcd.clear();
-        break;
+
     }
     if(collide_val == LOW)
     {
