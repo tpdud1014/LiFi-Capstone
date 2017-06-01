@@ -3,8 +3,8 @@
 #include <stdlib.h>
 SoftwareSerial BTSerial(2, 3);
 #define MOTOR_NUM 2
-#define SENSING_COUNT 5
-#define THRESHOLD 75
+#define SENSING_COUNT 4
+#define THRESHOLD 190
 
 const int E1Pin = 10;
 const int E2Pin = 11;
@@ -20,7 +20,7 @@ int flag = 0;
 int isReceived = 0;
 int loopgo = 0;
 int isBright = 1;
-//int THRESHOLD = 20;
+//int THRESHOLD = 50;
 typedef struct {
   byte enPin;
   byte directionPin;

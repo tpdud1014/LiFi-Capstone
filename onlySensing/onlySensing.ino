@@ -158,7 +158,7 @@ void check_danger()
       }
       itoa(cds_diff, tempChar, 10);
       itoa(cds_val, tempChar2, 10);
-      if(BTSerial.available()) {
+      if(BTSerial.available()&&cds_diff>=75) {
         BTSerial.write("Current Val=");
         BTSerial.write(tempChar2);
         BTSerial.write("\t");
