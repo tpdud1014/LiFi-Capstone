@@ -1,10 +1,8 @@
-#include <SoftwareSerial.h>
 #include <Arduino.h>
 #include <stdlib.h>
-SoftwareSerial BTSerial(2, 3);
 #define MOTOR_NUM 2
 #define SENSING_COUNT 4
-#define THRESHOLD 190
+#define THRESHOLD 200
 
 const int E1Pin = 10;
 const int E2Pin = 11;
@@ -13,7 +11,7 @@ const int M2Pin = 13;
 const int LEDPin = 6;
 const int collidePin = 8;
 const int btnPin = 5;
-const int speedo = 150;
+const int speedo = 160;
 int cds = A1;
 int switch_val = 0;
 int flag = 0;
@@ -46,7 +44,7 @@ void setup(){
   pinMode(btnPin, INPUT_PULLUP);
   digitalWrite(LEDPin, HIGH);
   Serial.begin(9600);
-  BTSerial.begin(9600);
+//  BTSerial.begin(9600);
 
   pinMode(collidePin, INPUT);
 
@@ -89,7 +87,7 @@ void go(int velocity){
   digitalWrite(Motors[0].directionPin, HIGH);
   digitalWrite(Motors[1].directionPin, LOW);
   analogWrite(Motors[0].enPin, velocity);
-  analogWrite(Motors[1].enPin, velocity);
+  analogWrite(Motors[1].enPin, velocity - 30);
 }
 ////////////////////////////////////////////////////////////////
 void halt(){
@@ -102,11 +100,11 @@ void halt(){
 /*-----------------END-----------------*/
 
 
-void printBT(int input) {
-  if(BTSerial.available()) {
-    BTSerial.write(input);
-  }
-}
+//void printBT(int input) {
+//  if(BTSerial.available()) {
+//    BTSerial.write(input);
+//  }
+//}
 
 
 
@@ -132,7 +130,7 @@ void check_danger()
     }
     pre_cds_val = cds_val;
     delay(17);
-    cds_val = analogRead(cds);
+//    cds_val = analogRead(cds);
     
     if(count_start == 1)
     {
@@ -158,14 +156,14 @@ void check_danger()
       }
       itoa(cds_diff, tempChar, 10);
       itoa(cds_val, tempChar2, 10);
-      if(BTSerial.available()) {
-        BTSerial.write("Current Val=");
-        BTSerial.write(tempChar2);
-        BTSerial.write("\t");
-        BTSerial.write("CDS_Diff=");
-        BTSerial.write(tempChar);
-        BTSerial.write("\n");
-      }
+//      if(BTSerial.available()) {
+//        BTSerial.write("Current Val=");
+//        BTSerial.write(tempChar2);
+//        BTSerial.write("\t");
+//        BTSerial.write("CDS_Diff=");
+//        BTSerial.write(tempChar);
+//        BTSerial.write("\n");
+//      }
 //      Serial.println(cds_diff);
       
       
@@ -191,7 +189,7 @@ void check_danger()
     if(blink_count == SENSING_COUNT)
     {
 //      lcd.clear();
-        break;
+//        break;
     }
     if(collide_val == LOW)
     {

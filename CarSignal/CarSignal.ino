@@ -1,10 +1,9 @@
-#include <SoftwareSerial.h>
 #include <Arduino.h>
 #include <stdlib.h>
-SoftwareSerial BTSerial(2, 3);
+#include <string.h>
 #define MOTOR_NUM 2
-#define SENSING_COUNT 4
-#define THRESHOLD 190
+#define SENSING_COUNT 6
+#define THRESHOLD 70
 
 const int E1Pin = 10;
 const int E2Pin = 11;
@@ -14,13 +13,14 @@ const int LEDPin = 6;
 const int collidePin = 8;
 const int btnPin = 5;
 const int speedo = 150;
+const int signalnum = 1;
 int cds = A1;
 int switch_val = 0;
 int flag = 0;
 int isReceived = 0;
 int loopgo = 0;
 int isBright = 1;
-//int THRESHOLD = 50;
+
 typedef struct {
   byte enPin;
   byte directionPin;
@@ -46,7 +46,7 @@ void setup(){
   pinMode(btnPin, INPUT_PULLUP);
   digitalWrite(LEDPin, HIGH);
   Serial.begin(9600);
-  BTSerial.begin(9600);
+
 
   pinMode(collidePin, INPUT);
 
@@ -59,10 +59,10 @@ void setup(){
 ////////////////////////////////////////////////////////////////
 void loop(){
     wait_for_push_button();
-//    THRESHOLD += 25;
     delay(5000);
     digitalWrite(LEDPin,HIGH);
-    go(speedo);
+//    go(speedo);
+    delay(1000);
     check_danger();
     halt();
     send_signal();
@@ -102,11 +102,7 @@ void halt(){
 /*-----------------END-----------------*/
 
 
-void printBT(int input) {
-  if(BTSerial.available()) {
-    BTSerial.write(input);
-  }
-}
+
 
 
 
@@ -124,6 +120,7 @@ void check_danger()
   int cds_diff = -1;
   int loop_count = 0;
   int count_start = 0;
+  
   while(true)
   {
     for(int k = 0;k < 10;k++){
@@ -131,7 +128,7 @@ void check_danger()
       tempChar2[k] = 0;
     }
     pre_cds_val = cds_val;
-    delay(17);
+    delay(31);
     cds_val = analogRead(cds);
     
     if(count_start == 1)
@@ -151,26 +148,12 @@ void check_danger()
     {
       cds_diff = cds_val - pre_cds_val;
       
-//      Serial.println(cds_diff);
       if(cds_diff < 0)
       {
         cds_diff *= -1;
-      }
-      itoa(cds_diff, tempChar, 10);
-      itoa(cds_val, tempChar2, 10);
-      if(BTSerial.available()) {
-        BTSerial.write("Current Val=");
-        BTSerial.write(tempChar2);
-        BTSerial.write("\t");
-        BTSerial.write("CDS_Diff=");
-        BTSerial.write(tempChar);
-        BTSerial.write("\n");
-      }
-//      Serial.println(cds_diff);
-      
-      
+      } 
     }
-//    Serial.println(cds_val);
+    
     int collide_val = digitalRead(collidePin);
     if(cds_diff >= THRESHOLD)
     {
@@ -178,20 +161,14 @@ void check_danger()
         {
           count_start = 1;
         }
-      
       blink_count++;
-//          Serial.println(blink_count);
-//          Serial.println(THRESHOLD);
-      
-//      Serial.println(cds_diff);
-      
-   
-      
     }
+    Serial.print("blink count: ");
+    Serial.println(blink_count);
+
     if(blink_count == SENSING_COUNT)
     {
-//      lcd.clear();
-        break;
+      break;
     }
     if(collide_val == LOW)
     {
@@ -203,13 +180,33 @@ void check_danger()
 ////////////////////////////////////////////////////////////////
 void send_signal()
 {
-  for(int i=0;i<30;i++){
-    digitalWrite(LEDPin, LOW);
-    delay(25);
-    digitalWrite(LEDPin, HIGH);
-    delay(25);
+  char stop_signal1[] = "010110100101";
+  for(int j = 0 ; j < signalnum; j++){
+    for(int i=0;i < 12;i++){
+      if(stop_signal1[i] - '0' == 0){
+        zero();
+      }
+      else
+      {
+        one();
+      }
+    }
   }
 }
+
+void zero()
+{
+  digitalWrite(LEDPin, LOW);
+  delay(25);
+  digitalWrite(LEDPin, HIGH);
+  delay(25);
+}
+
+void one()
+{
+  delay(50);
+}
+
 ////////////////////////////////////////////////////////////////
 void wait_for_push_button()
 {

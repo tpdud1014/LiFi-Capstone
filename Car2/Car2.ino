@@ -3,8 +3,8 @@
 #include <stdlib.h>
 SoftwareSerial BTSerial(2, 3);
 #define MOTOR_NUM 2
-#define SENSING_COUNT 4
-#define THRESHOLD 190
+#define SENSING_COUNT 2
+#define THRESHOLD 120
 
 const int E1Pin = 10;
 const int E2Pin = 11;
@@ -63,6 +63,7 @@ void loop(){
     delay(5000);
     digitalWrite(LEDPin,HIGH);
     go(speedo);
+    delay(1000);
     check_danger();
     halt();
     send_signal();
@@ -88,7 +89,7 @@ void go(int velocity){
   }
   digitalWrite(Motors[0].directionPin, HIGH);
   digitalWrite(Motors[1].directionPin, LOW);
-  analogWrite(Motors[0].enPin, velocity);
+  analogWrite(Motors[0].enPin, velocity-60);
   analogWrite(Motors[1].enPin, velocity);
 }
 ////////////////////////////////////////////////////////////////

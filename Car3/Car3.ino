@@ -1,10 +1,8 @@
-#include <SoftwareSerial.h>
 #include <Arduino.h>
 #include <stdlib.h>
-SoftwareSerial BTSerial(2, 3);
 #define MOTOR_NUM 2
-#define SENSING_COUNT 4
-#define THRESHOLD 190
+#define SENSING_COUNT 2
+#define THRESHOLD 70
 
 const int E1Pin = 10;
 const int E2Pin = 11;
@@ -20,7 +18,7 @@ int flag = 0;
 int isReceived = 0;
 int loopgo = 0;
 int isBright = 1;
-//int THRESHOLD = 50;
+
 typedef struct {
   byte enPin;
   byte directionPin;
@@ -46,7 +44,7 @@ void setup(){
   pinMode(btnPin, INPUT_PULLUP);
   digitalWrite(LEDPin, HIGH);
   Serial.begin(9600);
-  BTSerial.begin(9600);
+
 
   pinMode(collidePin, INPUT);
 
@@ -63,11 +61,17 @@ void loop(){
     delay(5000);
     digitalWrite(LEDPin,HIGH);
     go(speedo);
+    delay(1000);
     check_danger();
     halt();
     send_signal();
     flag = 0;
 }
+//void loop()
+//{
+//  go(150);
+//  delay(10000);
+//}
 ////////////////////////////////////////////////////////////////
 /*-----------------END-----------------*/
 
@@ -102,11 +106,7 @@ void halt(){
 /*-----------------END-----------------*/
 
 
-void printBT(int input) {
-  if(BTSerial.available()) {
-    BTSerial.write(input);
-  }
-}
+
 
 
 
@@ -131,7 +131,7 @@ void check_danger()
       tempChar2[k] = 0;
     }
     pre_cds_val = cds_val;
-    delay(17);
+    delay(31);
     cds_val = analogRead(cds);
     
     if(count_start == 1)
@@ -156,22 +156,14 @@ void check_danger()
       {
         cds_diff *= -1;
       }
-      itoa(cds_diff, tempChar, 10);
-      itoa(cds_val, tempChar2, 10);
-      if(BTSerial.available()) {
-        BTSerial.write("Current Val=");
-        BTSerial.write(tempChar2);
-        BTSerial.write("\t");
-        BTSerial.write("CDS_Diff=");
-        BTSerial.write(tempChar);
-        BTSerial.write("\n");
-      }
+    
 //      Serial.println(cds_diff);
       
       
     }
 //    Serial.println(cds_val);
     int collide_val = digitalRead(collidePin);
+    Serial.println(collide_val);
     if(cds_diff >= THRESHOLD)
     {
       if(count_start == 0)
@@ -182,19 +174,20 @@ void check_danger()
       blink_count++;
 //          Serial.println(blink_count);
 //          Serial.println(THRESHOLD);
-      
-//      Serial.println(cds_diff);
+     
       
    
       
     }
     if(blink_count == SENSING_COUNT)
     {
-//      lcd.clear();
-        break;
+      Serial.print("bkink count: ");
+      Serial.println(blink_count);
+      break;
     }
     if(collide_val == LOW)
     {
+      
       break;
     }
   }
