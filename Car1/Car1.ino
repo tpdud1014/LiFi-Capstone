@@ -11,7 +11,7 @@ const int M2Pin = 13;
 const int LEDPin = 6;
 const int collidePin = 8;
 const int btnPin = 5;
-const int speedo = 150;
+const int speedo = 160;
 int cds = A1;
 int switch_val = 0;
 int flag = 0;
@@ -87,7 +87,7 @@ void go(int velocity){
   digitalWrite(Motors[0].directionPin, HIGH);
   digitalWrite(Motors[1].directionPin, LOW);
   analogWrite(Motors[0].enPin, velocity);
-  analogWrite(Motors[1].enPin, velocity);
+  analogWrite(Motors[1].enPin, velocity - 30);
 }
 ////////////////////////////////////////////////////////////////
 void halt(){
