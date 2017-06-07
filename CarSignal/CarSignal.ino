@@ -54,14 +54,13 @@ void setup(){
     pinMode(Motors[i].enPin, OUTPUT);
     pinMode(Motors[i].directionPin, OUTPUT);
   }
-//  go(120);
 }
 ////////////////////////////////////////////////////////////////
 void loop(){
     wait_for_push_button();
     delay(5000);
     digitalWrite(LEDPin,HIGH);
-//    go(speedo);
+    go(speedo);
     delay(1000);
     check_danger();
     halt();
@@ -142,8 +141,10 @@ void check_danger()
       else
         loop_count++;
     }
+    
     if(pre_cds_val == -1)
     {}
+    
     else
     {
       cds_diff = cds_val - pre_cds_val;

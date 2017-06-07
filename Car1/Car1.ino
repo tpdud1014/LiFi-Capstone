@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #define MOTOR_NUM 2
 #define SENSING_COUNT 4
-#define THRESHOLD 200
+#define THRESHOLD 0
 
 const int E1Pin = 10;
 const int E2Pin = 11;
@@ -11,7 +11,7 @@ const int M2Pin = 13;
 const int LEDPin = 6;
 const int collidePin = 8;
 const int btnPin = 5;
-const int speedo = 160;
+const int speedo = 140;
 int cds = A1;
 int switch_val = 0;
 int flag = 0;

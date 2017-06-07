@@ -4,7 +4,7 @@
 SoftwareSerial BTSerial(2, 3);
 #define MOTOR_NUM 2
 #define SENSING_COUNT 2
-#define THRESHOLD 120
+#define THRESHOLD 110
 
 const int E1Pin = 10;
 const int E2Pin = 11;
@@ -13,7 +13,7 @@ const int M2Pin = 13;
 const int LEDPin = 6;
 const int collidePin = 8;
 const int btnPin = 5;
-const int speedo = 150;
+const int speedo = 120;
 int cds = A1;
 int switch_val = 0;
 int flag = 0;
@@ -89,7 +89,7 @@ void go(int velocity){
   }
   digitalWrite(Motors[0].directionPin, HIGH);
   digitalWrite(Motors[1].directionPin, LOW);
-  analogWrite(Motors[0].enPin, velocity-60);
+  analogWrite(Motors[0].enPin, velocity);
   analogWrite(Motors[1].enPin, velocity);
 }
 ////////////////////////////////////////////////////////////////
@@ -159,14 +159,14 @@ void check_danger()
       }
       itoa(cds_diff, tempChar, 10);
       itoa(cds_val, tempChar2, 10);
-      if(BTSerial.available()) {
-        BTSerial.write("Current Val=");
-        BTSerial.write(tempChar2);
-        BTSerial.write("\t");
-        BTSerial.write("CDS_Diff=");
-        BTSerial.write(tempChar);
-        BTSerial.write("\n");
-      }
+//      if(BTSerial.available()) {
+//        BTSerial.write("Current Val=");
+//        BTSerial.write(tempChar2);
+//        BTSerial.write("\t");
+//        BTSerial.write("CDS_Diff=");
+//        BTSerial.write(tempChar);
+//        BTSerial.write("\n");
+//      }
 //      Serial.println(cds_diff);
       
       
